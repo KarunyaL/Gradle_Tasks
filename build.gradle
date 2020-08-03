@@ -1,0 +1,51 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+    id 'project-report'
+	
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+    scm
+}
+
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes(
+                'Implementation-Title': 'Packaging JAR',
+                "Main-Class": "com.example.demo.GradleTasksApplication"
+        )
+    }
+    destinationDirectory = file("$rootDir/custom-jar")
+    archivesBaseName = 'packaged_customjar'
+}
+
+
+
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	scm 'org.springframework.boot:spring-boot-devtools'
+	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+
